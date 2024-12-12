@@ -32,4 +32,31 @@ export const conversationStyles = StyleSheet.create({
     color: AppColors.white,
     fontSize: 20,
   },
+
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    padding: 10,
+    borderTopColor: '#ccc',
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  chatinput: {
+    flex: 1,
+    backgroundColor: '#efefef',
+    paddingHorizontal: 20,
+    height: 50,
+    borderRadius: 10,
+    margin: 5,
+  },
+  chatSendButton: {
+    height: 50,
+    width: 50,
+    backgroundColor: AppColors.darkGreen,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,
+  },
 });
