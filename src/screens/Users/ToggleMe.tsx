@@ -28,7 +28,7 @@ const ToggleMe = () => {
     return (
         <View>
             <TouchableOpacity onPress={handleUserChange} style={usersStyle.toggleUser}>
-                <Text style={usersStyle.toggleLabel}>{curUser?.name??"No user"}</Text>
+                <Text style={usersStyle.toggleLabel}>Switch User {curUser?.name??"No user"}</Text>
                 </TouchableOpacity>
         </View>
     );

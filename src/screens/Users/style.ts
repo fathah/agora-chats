@@ -24,9 +24,15 @@ export const usersStyle = StyleSheet.create({
   toggleUser: {
     backgroundColor: AppColors.darkGreen,
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 15,
+    width: 150,
+    borderRadius: 10,
+    marginVertical: 15,
+
+    marginHorizontal: 'auto',
   },
   toggleLabel: {
     color: AppColors.white,
+    textAlign: 'center',
   },
 });
