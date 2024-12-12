@@ -12,13 +12,11 @@ const UsersIndex = () => {
 
 
     const loginCurrentUser = async () => {
-        const curUser = curUserSignal.value;
-        console.log('curUser', curUser);
-        
-        //await loginUser(curUser.id, curUser.token);
 
-        const user = await ChatClient.getInstance().getCurrentUsername();
-        console.log("Curr User==>",user);
+        const isLogged = await ChatClient.getInstance().isLoginBefore();
+        if(isLogged) return;
+        const curUser = curUserSignal.value;
+        await loginUser(curUser.id, curUser.token);
     }
 
     useEffect(() => {

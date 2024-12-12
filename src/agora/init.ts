@@ -6,6 +6,7 @@ export const initAgora = async (): Promise<boolean> => {
     .init(
       new ChatOptions({
         appKey: AgoraConstants.APP_KEY,
+        debugModel: true,
       }),
     )
     .then(() => {
