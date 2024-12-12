@@ -3,14 +3,37 @@ import { UserType } from "../../types/users";
 import UserTile from "./UserTile";
 import UsersClass from "../../models/UserModel";
 import ToggleMe from "./ToggleMe";
+import { useEffect } from "react";
+import { curUserSignal } from "../../signals/curUser";
+import { loginUser } from "../../agora/login";
+import { ChatClient } from "react-native-agora-chat";
 
 const UsersIndex = () => {
-    const users = UsersClass.getUsers();
 
 
-    const renderItem = ({ item }: { item: UserType }) => <UserTile user={item}/>;
+    const loginCurrentUser = async () => {
+        const curUser = curUserSignal.value;
+        console.log('curUser', curUser);
+        
+        //await loginUser(curUser.id, curUser.token);
+
+        const user = await ChatClient.getInstance().getCurrentUsername();
+        console.log("Curr User==>",user);
+    }
+
+    useEffect(() => {
+        loginCurrentUser();
+    },[])
+
 
    
+
+
+    const users = UsersClass.getUsers();
+    const renderItem = ({ item }: { item: UserType }) => <UserTile user={item} />;
+    
+
+
     return (
         <View>
             <FlatList

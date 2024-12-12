@@ -5,12 +5,12 @@ export const USERS_LIST: UserType[] = [
     id: 'fathah',
     name: 'Fathah',
     token:
-      '007eJxTYHjmfkPSmtthRavjtaq6mT+tpH54X9/NE794ixTv7v1JDvYKDCbJlsaJBgbGyYYWZiYmaamWiUYGBoapxsZJhoaWFmlm4ZMj0xsCGRluOXkxMDKwAjEjA4ivwmBunmacappsoJtknpiqa2iYmqablJhsrmuWlmxgmGxpkGqckgoA7qUmgw==',
+      '007eJxTYGBtlNNZ3Six3+fNZ5YjPX3sKV9597F6Pu2bXreSz8DUqlyBwSTZ0jjRwMA42dDCzMQkLdUy0cjAwDDV2DjJ0NDSIs1sY29UekMgI4ORnjQjIwMrAyMQgvgqDObmacappskGuknmiam6hoapabpJicnmumZpyQaGyZYGqcYpqQBIZSS9',
   },
   {
     id: 'pardeep',
     name: 'Pardeep',
     token:
-      '007eJxTYBCtmr9gfZjdbYHM/8rT12h2vKyzsFLeqHfbmWl9s9pr03gFBpNkS+NEAwPjZEMLMxOTtFTLRCMDA8NUY+MkQ0NLizSznMmR6Q2BjAy2DWtYGBlYGRiBEMRXYTBPNkhKMk8z0E0yT0zVNTRMTdNNTDIy1TU3tzAxSzY0sDA3SwEAsoMlUQ==',
+      '007eJxTYKip9Xu14c+1DZ1T13zqrfX68aX99DZJc8MN2kc7Gn0k2UwUGEySLY0TDQyMkw0tzExM0lItE40MDAxTjY2TDA0tLdLMrvZGpTcEMjJc+HuQlZGBlYERCEF8FQbzZIOkJPM0A90k88RUXUPD1DTdxCQjU11zcwsTs2RDAwtzsxQAbqEpvg==',
   },
 ];

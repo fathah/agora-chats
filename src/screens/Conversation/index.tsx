@@ -4,8 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
 import { UserType } from "../../types/users";
 import UsersClass from "../../models/UserModel";
-import AC from 'agora-chat';
-import { AgoraConstants } from "../../constants/AgoraConstants";
+import { loginUser } from "../../agora/login";
 
 const ConverstationIndex = () => {
 
@@ -16,9 +15,7 @@ const ConverstationIndex = () => {
     
     useEffect(() => {
         getUserData();
-    }, [])
-
-  
+    }, []);
     
     const getUserData = () => {
         const params = navigation.getState().routes[1].params;
@@ -37,20 +34,8 @@ const ConverstationIndex = () => {
         </View>;
     }
 
-    const conn = new AC.connection({
-        appKey: AgoraConstants.APP_KEY,
-    });
-
-    const options = {
-        user: user.id,
-        accessToken: user.token
-    }
-    
-    conn.open(options);
-
-
-
-
+    useEffect(() => {
+  },[])
 
     return (
         <View>
