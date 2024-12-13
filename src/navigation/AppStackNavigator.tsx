@@ -10,11 +10,12 @@ const Stack = createNativeStackNavigator();
   
 
 const AppStackNavigator = () => {
+    const options={headerShown: false}
     return (
         <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={options}>
           <Stack.Screen name={"Chats"} component={UsersIndex} />
-          <Stack.Screen name={"Converstation"} component={ConverstationIndex} options={{headerShown: false}} />
+          <Stack.Screen name={"Converstation"} component={ConverstationIndex}  />
       </Stack.Navigator>
     </NavigationContainer>
     );

@@ -6,15 +6,17 @@ import { UserType } from "../../types/users";
 import UsersClass from "../../models/UserModel";
 import { conversationStyles } from "./style";
 import MaterialIcon from "../../components/MaterialIcon";
-import { ChatClient, ChatConversationType, ChatMessage, ChatMessageType, ChatSearchDirection } from "react-native-agora-chat";
+import { ChatClient, ChatConversationType, ChatMessage, ChatMessageEventListener, ChatMessageType, ChatSearchDirection } from "react-native-agora-chat";
 import AgoraMessageCreateCallBack from "../../agora/callback";
 import ChatBubble from "./ChatBubble";
 import { useSignalEffect } from "@preact/signals-react";
 import { curUserSignal } from "../../signals/curUser";
+import { sendNotification } from "../../agora/notification";
+import { getUserStatus } from "../../agora/status";
 
 const ConverstationIndex = () => {
 
-
+    const flatListRef = useRef<FlatList>(null);
     const [user, setUser] = useState<undefined | UserType>(undefined);
     const [me, setMe] = useState<undefined | UserType>(undefined);
 
@@ -22,7 +24,6 @@ const ConverstationIndex = () => {
     const [input, setInput] = useState('');
 
     const navigation = useNavigation();
-    const flatListRef = useRef(null);
 
 
 
@@ -35,10 +36,11 @@ const ConverstationIndex = () => {
     }, []);
     
     const getUserData = () => {
-        const params = navigation.getState().routes[1].params;
+        const params = navigation.getState()!.routes[1].params;
         const id = params.id;
         const user = UsersClass.getUser(id);
-        setUser(user);
+      setUser(user);
+      getUserStatus();
     }
 
     const handleTextChange = (text: string) => {
@@ -46,7 +48,37 @@ const ConverstationIndex = () => {
     } 
 
 
+    let msgListener = new (class ss implements ChatMessageEventListener {
+        onMessagesReceived(messages: ChatMessage[]): void {
+            console.log('ConnectScreen.onMessagesReceived', messages);
+            setMessages((prev) => [...prev, ...messages]);
+            flatListRef.current?.scrollToEnd()
+
+        }
+        onCmdMessagesReceived(messages: ChatMessage[]): void {
+          console.log('ConnectScreen.onCmdMessagesReceived', messages);
+        }
+        onMessagesRead(messages: ChatMessage[]): void {
+          console.log('ConnectScreen.onMessagesRead', messages);
+        }
+        onMessagesDelivered(messages: ChatMessage[]): void {
+          console.log('ConnectScreen.onMessagesDelivered', messages);
+        }
+        onMessagesRecalled(messages: ChatMessage[]): void {
+          console.log('ConnectScreen.onMessagesRecalled', messages);
+        }
+        onConversationsUpdate(): void {
+          console.log('ConnectScreen.onConversationsUpdate');
+        }
+        onConversationRead(from: string, to?: string): void {
+          console.log('ConnectScreen.onConversationRead', from, to);
+        }
+      })();
+    
+
+
     const sendMessage = async () => {
+      try {
         if(user === undefined) return;
         const message =input.trim();
         if (message.length < 1) return;
@@ -54,8 +86,12 @@ const ConverstationIndex = () => {
        const messageObj =  ChatMessage.createTextMessage(user.id, message);
         const chatManager = ChatClient.getInstance().chatManager;
         chatManager.sendMessage(messageObj, new AgoraMessageCreateCallBack());
-        setMessages((prev)=>[...prev, messageObj]);
-
+        setMessages((prev) => [...prev, messageObj]);
+       // sendNotification(user.id, 'New Message', message);
+      } catch (error) {
+        console.log("Error Sending Message", error);
+        
+      }
     }
 
     const getConversation = async () => {
@@ -68,6 +104,8 @@ const ConverstationIndex = () => {
         });
         setMessages(convs);
         
+        setTimeout(() => flatListRef.current?.scrollToEnd(), 100);
+        
         
     }
 
@@ -75,6 +113,10 @@ const ConverstationIndex = () => {
     useEffect(() => {
         if (user) {
             getConversation(); 
+            
+        }
+        return () => {
+            ChatClient.getInstance().chatManager.addMessageListener(msgListener);
         }
         
     }, [user])

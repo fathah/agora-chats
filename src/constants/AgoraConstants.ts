@@ -1,5 +1,9 @@
 export const AgoraConstants = {
+  CHAT_HOST: 'https://a61.chat.agora.io',
+  ORG_NAME: '611258346',
+  APP_NAME: '1450986',
   APP_KEY: '611258346#1450986',
   APP_CERTIFICATE: 'cafeb2f6df314ea7a9f127a9a9fc34ef',
-  APP_TOKEN: '',
+  APP_TOKEN:
+    '007eJxTYPhXeuNjjXvdg5dn/y811BSSmG81NUv23JN47iplhedxx80VGEySLY0TDQyMkw0tzExM0lItE40MDAxTjY2TDA0tLdLMGPhi0hsCGRlaZ9uxMDKwMjAyMDGA+AwMAK6FHJI=',
 };

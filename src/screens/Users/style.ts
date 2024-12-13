@@ -2,6 +2,19 @@ import {StyleSheet} from 'react-native';
 import {AppColors} from '../../constants/colors';
 
 export const usersStyle = StyleSheet.create({
+  header: {
+    backgroundColor: AppColors.darkGreen,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  headerText: {
+    color: AppColors.white,
+
+    fontSize: 20,
+  },
   userTile: {
     flex: 1,
     flexDirection: 'row',
@@ -22,17 +35,15 @@ export const usersStyle = StyleSheet.create({
     marginRight: 20,
   },
   toggleUser: {
-    backgroundColor: AppColors.darkGreen,
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    width: 150,
+    backgroundColor: AppColors.white,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
     borderRadius: 10,
-    marginVertical: 15,
 
     marginHorizontal: 'auto',
   },
   toggleLabel: {
-    color: AppColors.white,
+    color: AppColors.darkGreen,
     textAlign: 'center',
   },
 });

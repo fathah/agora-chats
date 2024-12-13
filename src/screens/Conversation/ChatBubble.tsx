@@ -10,7 +10,11 @@ const ChatBubble = ({myId, msg }: {myId?:string, msg: ChatMessage }) => {
     return (<View style={containerStyle}>
             <View style={bubbleStyle}>
             <Text>{msg.body.content} </Text>
+            <View style={commonStyle.timeContainer}>
             <Text style={commonStyle.time}> {dateFormat(msg.localTime)}</Text>
+            </View>
+            <View style={commonStyle.timeSpace}></View>
+            
         </View></View>
     );
 }
@@ -18,16 +22,30 @@ const ChatBubble = ({myId, msg }: {myId?:string, msg: ChatMessage }) => {
 export default ChatBubble;
 
 const commonStyle = StyleSheet.create({
+    bubbleContainer: {
+        flexDirection: 'row',
+       
+    },
     bubble: {
         paddingHorizontal: 10,
         paddingVertical: 10, 
         marginBottom: 5,
+        minWidth: '20%',
+        maxWidth: '75%',
+         position:'relative'
     },
-    bubbleContainer: {
-        flexDirection:'row',
+    timeSpace: {
+        height:6, width:10
+    },
+    timeContainer: {
+        position: 'absolute',
+        right: 5,
+        bottom: 2
     },
     time: {
         color: AppColors.lightGrey,
+        fontSize: 11,
+        paddingHorizontal: 5
     }
 });
 
@@ -45,8 +63,8 @@ const style = StyleSheet.create({
        ...commonStyle.bubble,
         borderTopRightRadius: 0,
         borderTopLeftRadius: 10,
-        borderBottomRightRadius: 20,
-        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+        borderBottomLeftRadius: 20,
         marginRight:10,
         backgroundColor: AppColors.myBubbleBg
     },
@@ -54,8 +72,8 @@ const style = StyleSheet.create({
         ...commonStyle.bubble,
         borderTopRightRadius: 10,
         borderTopLeftRadius: 0,
-        borderBottomRightRadius: 20,
-        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+        borderBottomLeftRadius: 20,
         marginLeft:10,
         backgroundColor: AppColors.white
     }
