@@ -2,6 +2,8 @@ import {useNavigation} from '@react-navigation/native';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {conversationStyles} from './style';
 import {UserType} from '../../types/users';
+import MaterialIcon from '../../components/MaterialIcon';
+import { AppColors } from '../../constants/colors';
 
 const ChatHeader = ({user}: {user: UserType}) => {
   const navigation = useNavigation();
@@ -15,7 +17,7 @@ const ChatHeader = ({user}: {user: UserType}) => {
       <TouchableOpacity
         onPress={handleBackPress}
         style={conversationStyles.backButton}>
-        <Text style={conversationStyles.backButtonText}>{`<`}</Text>
+        <MaterialIcon icon='chevron-left' color={ AppColors.white}  size={30}/>
       </TouchableOpacity>
       <View style={conversationStyles.userProfile}>
         <Text>{user.name[0]}</Text>

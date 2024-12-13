@@ -22,7 +22,6 @@ const ToggleMe = () => {
         const newUser = curUser?.id === 'fathah' ? users[1] : users[0];
         curUserSignal.value = newUser;
         await loginUser(newUser.id, newUser.token);
-
         
     }
 

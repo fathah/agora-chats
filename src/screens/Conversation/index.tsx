@@ -6,19 +6,30 @@ import { UserType } from "../../types/users";
 import UsersClass from "../../models/UserModel";
 import { conversationStyles } from "./style";
 import MaterialIcon from "../../components/MaterialIcon";
-import { ChatClient, ChatMessage } from "react-native-agora-chat";
+import { ChatClient, ChatConversationType, ChatMessage, ChatMessageType, ChatSearchDirection } from "react-native-agora-chat";
 import AgoraMessageCreateCallBack from "../../agora/callback";
+import ChatBubble from "./ChatBubble";
+import { useSignalEffect } from "@preact/signals-react";
+import { curUserSignal } from "../../signals/curUser";
 
 const ConverstationIndex = () => {
 
-    const bg = require('./assets/images/chatbg.jpg');
 
     const [user, setUser] = useState<undefined | UserType>(undefined);
-    const [messages, setMessages] = useState([]);
-    const messageRef = useRef('');
+    const [me, setMe] = useState<undefined | UserType>(undefined);
+
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [input, setInput] = useState('');
 
     const navigation = useNavigation();
-    
+    const flatListRef = useRef(null);
+
+
+
+    useSignalEffect(() => {
+        setMe(curUserSignal.value);
+    })
+
     useEffect(() => {
         getUserData();
     }, []);
@@ -31,20 +42,43 @@ const ConverstationIndex = () => {
     }
 
     const handleTextChange = (text: string) => {
-        messageRef.current = text;
+        setInput(text);
     } 
+
 
     const sendMessage = async () => {
         if(user === undefined) return;
-        const message = messageRef.current;
-        console.log("Text is==>",message);
-        
-        messageRef.current = '';
+        const message =input.trim();
+        if (message.length < 1) return;
+        setInput('');
        const messageObj =  ChatMessage.createTextMessage(user.id, message);
         const chatManager = ChatClient.getInstance().chatManager;
         chatManager.sendMessage(messageObj, new AgoraMessageCreateCallBack());
+        setMessages((prev)=>[...prev, messageObj]);
 
     }
+
+    const getConversation = async () => {
+        if (user === undefined) return;
+        const convs = await ChatClient.getInstance().chatManager.getMsgsWithMsgType({
+            convId: user.id,
+            convType: ChatConversationType.PeerChat,
+            msgType: ChatMessageType.COMBINE,
+      
+        });
+        setMessages(convs);
+        
+        
+    }
+
+
+    useEffect(() => {
+        if (user) {
+            getConversation(); 
+        }
+        
+    }, [user])
+    
 
     if (user === undefined) {
         return <View>
@@ -55,19 +89,25 @@ const ConverstationIndex = () => {
     
 
     return (
-        <ImageBackground style={{ flex: 1, resizeMode: 'cover', }}
-        source={bg}
+        <View style={{ flex: 1}}
+        
         >
             <ChatHeader user={user} />
             <FlatList
+                ref={flatListRef}
                 data={messages}
-                renderItem={({ item }) => <Text>Message</Text>}
+                ListHeaderComponent={<View style={{height: 10}}></View>}
+                renderItem={({ item }) => <ChatBubble myId={ me?.id} msg={item} />}
                 style={{
                     flex: 1
                 }}
             />
             <View style={conversationStyles.inputContainer}>
-            <TextInput onChangeText={handleTextChange} placeholder="Enter Message"
+                <TextInput
+                    value={input}
+                    onChangeText={handleTextChange}
+                    placeholder="Enter Message"
+                    
                 style={conversationStyles.chatinput}
                 />
                 <TouchableOpacity style={conversationStyles.chatSendButton} onPress={sendMessage}>
@@ -75,7 +115,7 @@ const ConverstationIndex = () => {
                     </TouchableOpacity>
                 
            </View>
-        </ImageBackground>
+        </View>
     );
 }
 
