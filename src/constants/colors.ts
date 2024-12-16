@@ -3,5 +3,6 @@ export const AppColors = {
   black: '#000',
   white: '#fff',
   lightGrey: '#ccc',
+  darkGrey: '#9B9FA0',
   myBubbleBg: '#E4FFC7',
 };

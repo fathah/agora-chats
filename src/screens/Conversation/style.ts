@@ -50,6 +50,15 @@ export const conversationStyles = StyleSheet.create({
     borderRadius: 10,
     margin: 5,
   },
+  attachButton: {
+    height: 50,
+    width: 50,
+    backgroundColor: AppColors.darkGrey,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,
+  },
   chatSendButton: {
     height: 50,
     width: 50,
