@@ -1,17 +1,53 @@
-import { StyleSheet, Text, View } from "react-native";
+import {Image, Pressable, StyleSheet, Text, View} from "react-native";
 import { ChatMessage } from "react-native-agora-chat";
 import { AppColors } from "../../constants/colors";
 import { UserType } from "../../types/users";
+import {getScreenWidth} from "../../constants/dimens.ts";
+import {useNavigation} from "@react-navigation/native";
+import MaterialIcon from "../../components/MaterialIcon.tsx";
 
 const ChatBubble = ({myId, msg }: {myId?:string, msg: ChatMessage }) => {
-    const containerStyle = msg.from === myId ? style.myBubbleContainer : style.otherBubbleContainer;
-    const bubbleStyle = msg.from === myId ? style.mybubble : style.otherbubble;
+    const nav = useNavigation();
+    const isMe = msg.from === myId;
+    const containerStyle = isMe ? style.myBubbleContainer : style.otherBubbleContainer;
+    const bubbleStyle = isMe ? style.mybubble : style.otherbubble;
 
+    const viewImage = ()=>{
+        console.log(msg)
+        const url = msg.body.remotePath;
+        const width = msg.body.height;
+        const height = msg.body.width;
+        const aspectRatio = height/width;
+        nav.navigate('ImageView', {
+                url, aspectRatio
+        })
+
+    };
+    const imagePath = msg?.body?.remotePath?.length > 5 ? msg.body?.remotePath : msg.body.localPath;
+    const isRead = msg?.hasRead;
+    console.log(msg)
     return (<View style={containerStyle}>
             <View style={bubbleStyle}>
-            <Text>{msg.body.content} </Text>
+                {
+                    msg.body.type === 'img' ?
+                        <Pressable onPress={viewImage}>
+                            <Image
+                                source={{
+                                    uri: imagePath,
+                                    width: getScreenWidth() * 0.5,
+                                    height:200,}}
+                                style={{
+                                    borderRadius:10,
+                                    marginBottom:2
+                                }}
+                            />
+                        </Pressable>
+                        : <Text>{msg.body.content} </Text>
+
+                }
             <View style={commonStyle.timeContainer}>
             <Text style={commonStyle.time}> {dateFormat(msg.localTime)}</Text>
+                {isMe &&  <MaterialIcon icon='check-all' size={15} color={isRead ? AppColors.seenCheckBlue : AppColors.lightGrey}/>}
             </View>
             <View style={commonStyle.timeSpace}></View>
             
@@ -40,12 +76,15 @@ const commonStyle = StyleSheet.create({
     timeContainer: {
         position: 'absolute',
         right: 5,
-        bottom: 2
+        bottom: 2,
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     time: {
         color: AppColors.lightGrey,
         fontSize: 11,
-        paddingHorizontal: 5
+        paddingHorizontal: 5,
+        marginRight:2,
     }
 });
 

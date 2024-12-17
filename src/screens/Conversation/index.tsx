@@ -1,9 +1,10 @@
 import {
   FlatList,
+  SafeAreaView,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 import ChatHeader from './ChatHeader';
 import {useNavigation} from '@react-navigation/native';
@@ -17,7 +18,7 @@ import {
   ChatConversationType,
   ChatMessage,
   ChatMessageEventListener,
-  ChatMessageType
+  ChatMessageType,
 } from 'react-native-agora-chat';
 import AgoraMessageCreateCallBack from '../../agora/callback';
 import ChatBubble from './ChatBubble';
@@ -25,6 +26,7 @@ import {useSignalEffect} from '@preact/signals-react';
 import {curUserSignal} from '../../signals/curUser';
 import {getUserStatus} from '../../agora/status';
 import AttachModal from './AttachModal';
+import {ImagePickerResponse} from 'react-native-image-picker';
 
 const ConverstationIndex = () => {
   const flatListRef = useRef<FlatList>(null);
@@ -34,7 +36,6 @@ const ConverstationIndex = () => {
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
-
 
   const navigation = useNavigation();
 
@@ -90,7 +91,7 @@ const ConverstationIndex = () => {
       const message = input.trim();
       if (message.length < 1) return;
       setInput('');
-      const messageObj = ChatMessage.createTextMessage(user.id, message,);
+      const messageObj = ChatMessage.createTextMessage(user.id, message);
       const chatManager = ChatClient.getInstance().chatManager;
       chatManager.sendMessage(messageObj, new AgoraMessageCreateCallBack());
       setMessages(prev => [...prev, messageObj]);
@@ -102,22 +103,21 @@ const ConverstationIndex = () => {
 
   const getConversation = async () => {
     if (user === undefined) return;
-    const convs = await ChatClient.getInstance().chatManager.getMsgsWithMsgType(
+    const allConversations = await ChatClient.getInstance().chatManager.getMsgs(
       {
         convId: user.id,
         convType: ChatConversationType.PeerChat,
-        msgType: ChatMessageType.COMBINE,
+        startMsgId:'',
       },
     );
-    setMessages(convs);
+    setMessages(allConversations);
 
     setTimeout(() => flatListRef.current?.scrollToEnd(), 100);
   };
 
-
   const onAttachClick = () => {
-    setShowAttach((prev)=>!prev);
-  }
+    setShowAttach(prev => !prev);
+  };
 
   useEffect(() => {
     if (user) {
@@ -128,6 +128,21 @@ const ConverstationIndex = () => {
     };
   }, [user]);
 
+  const sendImages = async (images: ImagePickerResponse) => {
+    if (images.assets && images.assets.length < 1) return;
+    const message = ChatMessage.createImageMessage(
+      user?.id,
+      images.assets[0].uri,
+    );
+    const chatManager = ChatClient.getInstance().chatManager;
+    const resp = await chatManager.sendMessage(
+      message,
+      new AgoraMessageCreateCallBack(),
+    );
+    console.log('Send Image', resp);
+    setMessages(prev => [...prev, message]);
+  };
+
   if (user === undefined) {
     return (
       <View>
@@ -137,7 +152,7 @@ const ConverstationIndex = () => {
   }
 
   return (
-    <View style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1}}>
       <ChatHeader user={user} />
       <FlatList
         ref={flatListRef}
@@ -155,7 +170,7 @@ const ConverstationIndex = () => {
           placeholder="Enter Message"
           style={conversationStyles.chatinput}
         />
-         <TouchableOpacity
+        <TouchableOpacity
           style={conversationStyles.attachButton}
           onPress={onAttachClick}>
           <MaterialIcon icon="attachment" color="white" />
@@ -169,8 +184,10 @@ const ConverstationIndex = () => {
 
       <AttachModal
         show={showAttach}
-        onClose={onAttachClick}/>
-    </View>
+        onClose={onAttachClick}
+        onAttach={sendImages}
+      />
+    </SafeAreaView>
   );
 };
 

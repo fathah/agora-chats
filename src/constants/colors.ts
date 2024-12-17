@@ -5,4 +5,5 @@ export const AppColors = {
   lightGrey: '#ccc',
   darkGrey: '#9B9FA0',
   myBubbleBg: '#E4FFC7',
+  seenCheckBlue:'#4FB6EC'
 };

@@ -1,4 +1,4 @@
-import {FlatList, PermissionsAndroid, View} from 'react-native';
+import {FlatList, PermissionsAndroid, Platform, SafeAreaView, View} from 'react-native';
 import {UserType} from '../../types/users';
 import UserTile from './UserTile';
 import UsersClass from '../../models/UserModel';
@@ -32,20 +32,24 @@ const UsersIndex = () => {
   });
 
   useEffect(() => {
-    PermissionsAndroid.request('android.permission.POST_NOTIFICATIONS')
-      .then(res => {
-        console.log('Notification Success', res);
-      })
-      .catch(e => {
-        console.log('Notification Error', e);
-      });
+    if(Platform.OS==='android'){
+      PermissionsAndroid.request('android.permission.POST_NOTIFICATIONS')
+          .then(res => {
+            console.log('Notification Future:', res);
+          })
+          .catch(e => {
+            console.log('Notification Error', e);
+          });
+    }
+
+
   }, []);
 
   return (
-    <View>
+    <SafeAreaView>
       <UsersHeader />
       <FlatList data={users} renderItem={renderItem} />
-    </View>
+    </SafeAreaView>
   );
 };
 
