@@ -18,7 +18,6 @@ import {
   ChatConversationType,
   ChatMessage,
   ChatMessageEventListener,
-  ChatMessageType,
 } from 'react-native-agora-chat';
 import AgoraMessageCreateCallBack from '../../agora/callback';
 import ChatBubble from './ChatBubble';
@@ -29,6 +28,7 @@ import AttachModal from './AttachModal';
 import {ImagePickerResponse} from 'react-native-image-picker';
 
 const ConverstationIndex = () => {
+
   const flatListRef = useRef<FlatList>(null);
   const [user, setUser] = useState<undefined | UserType>(undefined);
   const [me, setMe] = useState<undefined | UserType>(undefined);
@@ -143,6 +143,14 @@ const ConverstationIndex = () => {
     setMessages(prev => [...prev, message]);
   };
 
+  const navigateToCropVideo = async (video: ImagePickerResponse) => {
+    if(video && video.assets){
+      const videoItem = video.assets[0];
+      console.log("Video is=>", videoItem);
+      navigation.navigate('CropVideo', {video: videoItem.uri, width: videoItem.width, height: videoItem.height,fileName: videoItem.fileName});
+    }
+  }
+
   if (user === undefined) {
     return (
       <View>
@@ -186,6 +194,7 @@ const ConverstationIndex = () => {
         show={showAttach}
         onClose={onAttachClick}
         onAttach={sendImages}
+        onVideoAttach={navigateToCropVideo}
       />
     </SafeAreaView>
   );

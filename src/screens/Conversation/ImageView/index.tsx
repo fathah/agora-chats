@@ -25,7 +25,11 @@ const goBack = ()=>{
       }}
       onPress={goBack}
       >
-          <MaterialIcon icon={"close"} color={AppColors.white} size={30}/>
+          <MaterialIcon
+              icon={"close"}
+              color={AppColors.white}
+              size={30}/>
+
       </Pressable>
       <Image
       source={{

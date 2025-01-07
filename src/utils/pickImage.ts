@@ -7,3 +7,11 @@ export const pickImage = async (): Promise<ImagePickerResponse>  => {
 
   });
 };
+
+export const pickVideo = async (): Promise<ImagePickerResponse>  => {
+  return await launchImageLibrary({
+    mediaType: 'video',
+    selectionLimit:1,
+
+  });
+};

@@ -19,9 +19,8 @@ const ChatBubble = ({myId, msg }: {myId?:string, msg: ChatMessage }) => {
         const height = msg.body.width;
         const aspectRatio = height/width;
         nav.navigate('ImageView', {
-                url, aspectRatio
-        })
-
+                url, aspectRatio,
+        });
     };
     const imagePath = msg?.body?.remotePath?.length > 5 ? msg.body?.remotePath : msg.body.localPath;
     const isRead = msg?.hasRead;

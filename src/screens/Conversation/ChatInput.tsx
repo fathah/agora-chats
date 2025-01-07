@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { TextInput } from "react-native";
-import { conversationStyles } from "./style";
+import { useState } from 'react';
+import { TextInput } from 'react-native';
+import { conversationStyles } from './style';
 
 const ChatInput = ({onDone,onClear}:{onDone: (text:string) => void, onClear: () => void}) => {
     const [input, setInput] = useState('');

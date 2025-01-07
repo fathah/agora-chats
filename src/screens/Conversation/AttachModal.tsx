@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {pickImage} from '../../utils/pickImage.ts';
+import {pickImage, pickVideo} from '../../utils/pickImage.ts';
 import MaterialIcon from '../../components/MaterialIcon.tsx';
 import {ImagePickerResponse} from 'react-native-image-picker';
 import {useCallback} from 'react';
@@ -14,15 +14,22 @@ const AttachModal = ({
   show,
   onClose,
   onAttach,
+    onVideoAttach,
 }: {
   show: boolean;
   onClose: () => void;
   onAttach: (images: ImagePickerResponse) => void;
+  onVideoAttach: (images: ImagePickerResponse) => void;
 }) => {
   const openImagePicker = useCallback(async () => {
     const resp = await pickImage();
     onAttach(resp);
   }, [onAttach]);
+
+  const openVideoPicker = useCallback(async () => {
+    const resp = await pickVideo();
+    onVideoAttach(resp);
+  }, [onVideoAttach]);
 
   return (
     <Modal
@@ -38,6 +45,12 @@ const AttachModal = ({
             onPress={openImagePicker}
             style={[styles.button, styles.imageButton]}>
             <MaterialIcon icon="image" size={30} color="#1b34b2" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+              onPress={openVideoPicker}
+              style={[styles.button, styles.imageButton]}>
+            <MaterialIcon icon="video" size={30} color="#1b34b2" />
           </TouchableOpacity>
         </View>
       </Pressable>
@@ -66,6 +79,10 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
+    flexDirection: 'row',
+    justifyContent:'center',
+    gap:20,
+
   },
   button: {
     borderRadius: 20,
